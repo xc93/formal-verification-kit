@@ -76,7 +76,9 @@ the constructs that actually appear (and *nothing else*), and a semantics module
 `configuration` of cells (e.g. `<k>`, `<store>`, `<funcs>`, `<stack>`) and one rewrite
 `rule` per construct. Cover only what the code touches — `sum` needs integer
 literals/names, `+`, `<=`, `=`, `+=`, `while`, `def`, `return`, and call; it introduces
-**no `if`**. Do not invent K features; check each against the manual / Lesson 1.22.
+**no `if`** (only because the program never uses one — `if` is straightforward to add
+when a program needs it; it is in Lesson 1.22's full language). Do not invent K
+features; check each against the manual / Lesson 1.22.
 
 > **MVP stopgap.** The fragment is a deliberate placeholder. The long-term design is
 > **full per-language K semantics** (a real Python-in-K, TS-in-K, …), so the *literal*

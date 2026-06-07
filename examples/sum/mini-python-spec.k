@@ -38,7 +38,7 @@ module VERIFICATION
   // VC-EXACT: exact halving of an (always-even) product of consecutive integers.
   // Unlike Lesson 1.22's down-counting loop (a single product, no simplifications
   // needed), the up-counting invariant divides a SYMBOLIC product and the
-  // inductive step equates two distinct products under Euclidean /Int, so these
+  // inductive step equates two distinct products under truncating /Int, so these
   // are needed -- not merely held in reserve.
   rule (X:Int *Int (X +Int 1)) /Int 2 *Int 2 => X *Int (X +Int 1)
     [simplification]

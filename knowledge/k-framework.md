@@ -12,7 +12,7 @@ Concrete companion to read alongside this file: the worked sum example,
 [`../examples/sum/mini-python.k`](../examples/sum/mini-python.k) (the semantics) and
 [`../examples/sum/mini-python-spec.k`](../examples/sum/mini-python-spec.k) (the claims).
 Everything below is grounded in those two files and in K Tutorial **Lesson 1.22**
-("Basics of Deductive Program Verification using K").
+(Tutorial 1, Lesson 22 — "Basics of Deductive Program Verification using K").
 
 ---
 

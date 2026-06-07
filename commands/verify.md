@@ -104,8 +104,9 @@ Three moving parts:
 
 Default scope is **partial correctness** (if/when the loop terminates, the
 postcondition holds). **Termination is a recommendation, not proved** unless the
-user asks; when asked, add a decreasing variant (e.g. `N − i ≥ 0`, strictly
-decreasing per iteration) to the loop claim and discharge it alongside the VCs.
+user asks; when asked, add a decreasing measure (e.g. `N − i`, bounded below by
+`0` and strictly decreasing per iteration) to the loop claim and discharge it
+alongside the VCs.
 
 > **If construction fails or gets stuck — that is a finding, not a dead end.**
 > A VC that won't discharge, a side condition you are *forced* to invent, a

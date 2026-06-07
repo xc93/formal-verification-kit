@@ -228,6 +228,11 @@ Once `(SUM)` is machine-checked, it proves `sum(n) = n*(n+1)/2` for **every**
 - `sum(1) == 1`  → subsumed (`1*2/2 = 1`,  and `1 ≥ 0`). **Redundant.**
 - `sum(0) == 0`  → subsumed (`0*1/2 = 0`,  and `0 ≥ 0`). **Redundant.**
 
+**CI saving.** These 3 in-domain unit tests only re-check points the single proof
+already covers for *all* `n ≥ 0`, so dropping them removes 3 test executions from
+every CI run — one proof replaces an unbounded family of point-checks. The saving
+compounds across every verified function.
+
 **Keep the out-of-domain boundary test.** A test like `sum(-1) == 0` (or any
 `n ≤ 0` boundary check) is **outside** the verified domain `n ≥ 0` and is exactly
 where the §5 finding lives — **keep it** (it pins behavior the proof does not

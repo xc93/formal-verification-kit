@@ -172,8 +172,8 @@ variant** — it never asserts the loop *halts*. There is no decreasing measure 
 the proof, so termination is simply not established.
 
 **Total correctness** additionally requires a **decreasing measure** (a
-well-founded variant, e.g. `N − i ≥ 0` strictly decreasing each iteration) to rule
-out infinite looping. The kit's default is partial correctness; **flag total
+well-founded measure, e.g. `N − i`, bounded below (`≥ 0`) and strictly decreasing
+each iteration) to rule out infinite looping. The kit's default is partial correctness; **flag total
 correctness as a recommendation in the report and do not attempt it unless the
 user asks.** When asked, the move is: add the variant to the loop claim and
 discharge "strictly decreases, bounded below" alongside the existing VCs.
