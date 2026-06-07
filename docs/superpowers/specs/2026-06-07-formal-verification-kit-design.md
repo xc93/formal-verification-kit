@@ -200,3 +200,22 @@ tests to drop (§1.1 benefit #1).
   an opt-in `--apply` to actually remove redundant tests; native per-agent
   adapters; auto-running the toolchain (which also enables *confident* test
   removal); wiring full per-language K semantics.
+
+## 12. Roadmap — top item from the final review (the "growth lever")
+
+The final whole-kit dry-run (factorial, `def fact(n): r=1; i=1; while i<=n: r*=i; i+=1`)
+confirmed the limit we designed for: a fresh agent gets through the semantics and
+the loop-invariant *shape* by imitation, then stalls because factorial's closed
+form `N!/(I-1)!` is **non-polynomial**. The kit's VC toolbox (Z3 for linear facts +
+the exact-halving `[simplification]`) is polynomial/division-by-2 specialized and
+offers no transferable recipe for a multiplicative VC over a recursively-defined
+symbol. The agent correctly hits the "spec-difficulty → escalate via `sources.md`"
+off-ramp — but that off-ramp is a pointer to papers, not an operational path, so it
+cannot *complete* the factorial proof from the kit alone.
+
+**Highest-leverage next investment (matches §1.1(c), examples are the growth lever):**
+add a second worked example with (a) a **recursively-defined postcondition symbol**
+(e.g. `factorial`) declared in the semantics/spec module, and (b) a **non-halving
+multiplicative `[simplification]` lemma**, so agents have a transferable pattern for
+non-polynomial specs. A list-loop example (separation-logic-style heap reasoning) is
+the natural third. These do more for capability than expanding the prose primers.
