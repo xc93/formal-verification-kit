@@ -33,8 +33,10 @@ With no arguments it operates on the whole current program / each function in it
 > [`../knowledge/k-framework.md`](../knowledge/k-framework.md) (claims, `kprove`,
 > `seqstrict`/heating, `[simplification]`, `/Int`), and
 > [`../knowledge/matching-logic.md`](../knowledge/matching-logic.md) (the
-> connectives). The fully worked target shape is
-> [`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md). These distilled primers
+> connectives). The fully worked target shapes are in
+> [`../examples/`](../examples/) — pick the **closest by shape** (the reference pair
+> is [`sum-up`](../examples/sum-up/PROOF.md) / [`sum-down`](../examples/sum-down/PROOF.md)).
+> These distilled primers
 > are a **fast path for the common case** (imperative functions, simple counting
 > loops); for recursion, recursive data structures, binders, or concurrency they
 > are a starting point only — escalate by topic via
@@ -122,7 +124,7 @@ Map the project's existing tests onto the verified spec and classify each:
   *within the verified domain***. Once the function contract is machine-checked it
   holds for *every* input in its domain, so a unit test asserting a single
   in-domain input/output point is subsumed. For each, show the one-line reason
-  (`sum(5) == 15` → `5*6/2 = 15`, `5 ≥ 0` → subsumed) and recommend removal
+  (`sum_to_n(5) == 15` → `5*6/2 = 15`, `5 ≥ 0` → subsumed) and recommend removal
   (**conditioned on machine-checking** — see the Honesty gate), with an estimate
   of **CI time saved**.
 
@@ -139,8 +141,8 @@ Map the project's existing tests onto the verified spec and classify each:
   later option.)
 
 The worked instance is the test-redundancy snippet in
-[`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md) §6 — `sum(5)==15`,
-`sum(1)==1`, `sum(0)==0` flagged redundant; the out-of-domain `sum(-1)==0`
+[`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md) §6 — `sum_to_n(5)==15`,
+`sum_to_n(1)==1`, `sum_to_n(0)==0` flagged redundant; the out-of-domain `sum_to_n(-1)==0`
 boundary test **kept**. Imitate that shape.
 
 ### Step 4 — Emit artifacts
@@ -170,7 +172,7 @@ toolchain; a `#Top` from `kprove` is what would upgrade the result from
 Produce the human-readable report:
 
 - **What's proved** — the function contract(s) and loop circularity(ies), in plain
-  language (e.g. "for every `n ≥ 0`, `sum(n) = n*(n+1)/2`, if and when it
+  language (e.g. "for every `n ≥ 0`, `sum_to_n(n) = n*(n+1)/2`, if and when it
   terminates").
 - **Residual risk** — **partial vs total correctness** (termination not proved
   unless asked); the **trusted base** (adequacy of the mini-X fragment semantics;

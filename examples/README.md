@@ -25,24 +25,36 @@ These examples do double duty:
 | Example | Language | What it demonstrates (shape / technique) | Status |
 |---|---|---|---|
 | [`sum-up/`](sum-up/) | Python | Count-**up** loop (`i` from `1` to `n`); **additive, polynomial** loop invariant + its circularity (`I ≤ N+1`); the `n < 0` missing-precondition *Finding* | constructed |
-| `sum-down/` *(coming)* | Python | Count-**down** loop; the **"remaining-work"** invariant — same result `n·(n+1)/2`, a genuinely **different invariant shape** than `sum-up` | coming |
+| [`sum-down/`](sum-down/) | Python | Count-**down** loop; the **"remaining-work"** invariant (`I ≥ 0`) — same result `n·(n+1)/2`, a genuinely **different invariant shape** than `sum-up` (`n` drops out of the loop spec; no init VC; only one live simplification) | constructed |
+| `sum-recursive/` *(planned)* | Python | Recursion: circularity on the recursive call's contract — same result, the recursive shape | planned |
 
-*Roadmap shapes worth adding next (each a new pattern): a **product / factorial**
-(non-polynomial, multiplicative VC), an **array/list loop** (sum/max/search over a
-sequence), and a **recursive** function (gcd, fib).*
+**The `sum-*` cluster — one contract, many implementations.** `sum-up` and
+`sum-down` compute the *same* spec (`n·(n+1)/2`) by different loops, and **the proof
+obligations differ even though the contract does not**. That contrast is the
+teaching payload — see each example's `README.md` ("what counting up / down changes").
+
+*Other roadmap shapes worth adding next (each a new pattern): a **product /
+factorial** (non-polynomial, multiplicative VC) and an **array / list loop** (sum /
+max / search over a sequence).*
 
 ## Anatomy of an example
 
 Every example folder follows the same layout, so humans and agents can navigate
 any of them the same way:
 
-| File | What it is |
-|---|---|
-| the program (e.g. `summation.py`) | the actual source code being verified |
-| `mini-<lang>.k` (e.g. `mini-python.k`) | a **minimal K semantics** of just the language constructs the program uses (the "mini-X" fragment) |
-| `<name>-spec.k` (e.g. `mini-python-spec.k`) | the **K `claim`s** — the function contract (`φ_pre ⇒ φ_post`) and each loop's circularity |
-| `PROOF.md` | the **constructed proof** — the reachability spec, the circularity, an informal then machine-detailed proof, plus the **Findings** and **test-redundancy** sections |
-| `README.md` | one-paragraph summary + the example's status |
+| File | Stage | What it is |
+|---|---|---|
+| the program (e.g. `sum.py`) | — | the actual source code being verified |
+| `mini-<lang>.k` (e.g. `mini-python.k`) | `/formalize` | a **minimal K semantics** of just the constructs the program uses (the "mini-X" fragment) |
+| `<name>-spec.k` (e.g. `mini-python-spec.k`) | `/formalize` | the **K `claim`s** — the function contract (`φ_pre ⇒ φ_post`) and each loop's circularity |
+| `SPEC.md` | `/formalize` | plain-English spec note (for a reader who never opens the `.k` files) |
+| `FINDINGS.md` | `/formalize` | plain-language **Findings** — bugs / missing preconditions / corner cases (benefit 2) |
+| `PROOF.md` | `/verify` | the **constructed proof** + the **test-redundancy** recommendation (benefit 1) |
+| `README.md` | — | one-paragraph summary + the example's status |
+| `PROMPTS.md` | — | the exact prompts that reproduce the example with the kit |
+
+The file set maps to the two commands: **`/formalize`** produces the semantics, the
+claims, `SPEC.md`, and `FINDINGS.md`; **`/verify`** produces `PROOF.md`.
 
 ## How to add an example
 

@@ -79,12 +79,13 @@ Running `/formalize` then `/verify` produces, written alongside your code:
 
 This is one of a **growing library of worked examples** — browse the catalog in
 [`examples/`](examples/). Each takes a real function from source code all the way
-to a constructed proof, file for file. The first,
-[`examples/sum-up/`](examples/sum-up/), is Python `sum(n) = 1 + 2 + … + n` (proof
-in [`examples/sum-up/PROOF.md`](examples/sum-up/PROOF.md)); more are added over
-time — and the vetted, machine-checked ones double as the fine-tuning corpus for
-the product. See [`examples/README.md`](examples/README.md) for the catalog and how
-to add your own.
+to a constructed proof, file for file. The first members are the **`sum-*`
+cluster** — [`sum-up/`](examples/sum-up/) and [`sum-down/`](examples/sum-down/)
+compute the *same* contract (`n·(n+1)/2`) by counting **up** vs. **down**, showing
+that **the proof obligations differ even when the spec does not**. More are added
+over time — and the vetted, machine-checked ones double as the fine-tuning corpus
+for the product. See [`examples/README.md`](examples/README.md) for the catalog and
+how to add your own.
 
 ## <a id="honest-status"></a>Honest status (MVP)
 
@@ -119,10 +120,6 @@ semantics, the [K framework](https://kframework.org), matching logic, and the
 proof techniques — so that **one line in yields a verified program out**, with
 zero extra effort. This MVP approximates that today with bundled knowledge plus
 an agent-driven workflow.
-
-The whole kit distills the end-to-end `sum` experiment in the upstream repo
-**[`formally-verified-sum`](https://github.com/grosu/formally-verified-sum)** —
-the original worked example of a formally verified function.
 
 ## Layout
 

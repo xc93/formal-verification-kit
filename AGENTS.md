@@ -16,7 +16,7 @@ Before using these commands, read [`knowledge/matching-logic.md`](knowledge/matc
 
 ## TEMPLATE
 
-Imitate [`examples/sum-up/`](examples/sum-up/) — see its [`README.md`](examples/sum-up/README.md) for the file-by-file template (the fragment "mini-X" K semantics, the reachability/circularity claims, and the constructed proof).
+Imitate the **closest example by shape** in [`examples/`](examples/) — start from its [catalog](examples/README.md). The reference pair is [`examples/sum-up/`](examples/sum-up/) (count-up / additive invariant) and [`examples/sum-down/`](examples/sum-down/) (count-down / remaining-work invariant); each shows the file-by-file template — the mini-X K semantics, the reachability/circularity claims, the spec note, the findings, and the constructed proof.
 
 ---
 

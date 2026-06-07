@@ -6,7 +6,7 @@
 
 **Architecture:** No agent-specific wiring. `AGENTS.md` is the universal entrypoint that defines the `/formalize` and `/verify` triggers and tells the agent to read `knowledge/` first (the bundled "learning"). `commands/*.md` hold the two workflows. `knowledge/*.md` hold the distilled K + matching-logic + technique references (read on load; optional live refresh from `sources.md`). `examples/sum-up/` is the worked template the agent imitates.
 
-**Tech Stack:** Plain Markdown only. The example reuses the K artifacts from the `formally-verified-sum` repo (`/home/openclaw/k-bridge`). No build system; "tests" are self-contained-ness and cross-reference checks.
+**Tech Stack:** Plain Markdown only. The example reuses the K artifacts from the original `sum` verification experiment. No build system; "tests" are self-contained-ness and cross-reference checks.
 
 **Repo root:** `/home/openclaw/formal-verification-kit/`
 
@@ -30,7 +30,7 @@
 `knowledge/*.md` (Tasks 2–5) are mutually independent and SHOULD be fanned out in parallel. `examples/sum-up` (Task 6) is independent. `commands/*` (Tasks 7–8) reference knowledge + example. `AGENTS.md` (Task 9) references commands + knowledge. `README.md` (Task 10) references everything. Build in roughly this order.
 
 **Source material on disk (reuse, do not re-derive):**
-- `/home/openclaw/k-bridge/summation.py`, `mini-python.k`, `mini-python-spec.k`, `sum-verification.md`, `sum-correctness-proof.md` — the verified example.
+- `/home/openclaw/k-bridge/sum.py`, `mini-python.k`, `mini-python-spec.k`, `sum-verification.md`, `sum-correctness-proof.md` — the verified example.
 - `/home/openclaw/.claude/projects/-home-openclaw-k-bridge/memory/` — `matching-logic-corpus.md`, `k-verification-model.md` (distilled facts + correct citations).
 - `/tmp/kdocs/` — `L22_proofs.md`, `user_manual.md` (K reference; cite line areas).
 
@@ -176,7 +176,7 @@ git commit -m "knowledge: source index for citations and --refresh"
 ## Task 6: `examples/sum-up/` (the worked template)
 
 **Files:**
-- Create: `examples/sum-up/summation.py` (copy of `/home/openclaw/k-bridge/summation.py`)
+- Create: `examples/sum-up/sum.py` (copy of `/home/openclaw/k-bridge/sum.py`)
 - Create: `examples/sum-up/mini-python.k` (copy of `/home/openclaw/k-bridge/mini-python.k`)
 - Create: `examples/sum-up/mini-python-spec.k` (copy of `/home/openclaw/k-bridge/mini-python-spec.k`)
 - Create: `examples/sum-up/PROOF.md` (condensed proof + findings + test-redundancy illustration)
@@ -186,14 +186,14 @@ git commit -m "knowledge: source index for citations and --refresh"
 
 ```bash
 cd /home/openclaw/formal-verification-kit
-cp /home/openclaw/k-bridge/summation.py examples/sum-up/summation.py
+cp /home/openclaw/k-bridge/sum.py examples/sum-up/sum.py
 cp /home/openclaw/k-bridge/mini-python.k examples/sum-up/mini-python.k
 cp /home/openclaw/k-bridge/mini-python-spec.k examples/sum-up/mini-python-spec.k
 ```
 
 - [ ] **Step 2: Write `examples/sum-up/PROOF.md`** — a condensed version of `/home/openclaw/k-bridge/sum-verification.md`: the reachability spec (SUM claim), the loop circularity (LOOP claim, `I ≤ N+1`), the informal proof, and the machine-detailed proof sketch. ALSO add a short worked instance of each user benefit: a **Findings** snippet (the `n < 0` missing-case: code returns 0 but `N(N+1)/2` ≠ 0 — recommend a precondition or a sign split) and a **Test-redundancy** snippet (the verified spec subsumes the `test_sums_one_to_n`/`test_sum_of_one` cases within `n ≥ 0`; keep the `n ≤ 0` test since it's the boundary/out-of-spec case).
 
-- [ ] **Step 3: Write `examples/sum-up/README.md`** — 1 paragraph: this is the template `/formalize` and `/verify` imitate; lists the files; links to PROOF.md and to the upstream full write-up repo `formally-verified-sum`.
+- [ ] **Step 3: Write `examples/sum-up/README.md`** — 1 paragraph: this is the template `/formalize` and `/verify` imitate; lists the files; links to PROOF.md and to its own `PROOF.md`.
 
 - [ ] **Step 4: Self-check** — the copied `.k` files are byte-identical to source; PROOF.md's claims match `mini-python-spec.k` exactly (same loop body term, same `I ≤ N+1`, same `N*(N+1)/2`).
 
@@ -299,7 +299,7 @@ git commit -m "Add AGENTS.md universal entrypoint (/formalize, /verify triggers 
   - **What it is / how to try it:** point your agent at this repo (it reads `AGENTS.md`), then say `/formalize` and `/verify` on your code. Works with any agent that reads `AGENTS.md`.
   - **What you get:** formal specs (K reachability claims) per function + loop-invariant circularities; a constructed proof + `.k` artifacts + run-commands; a Findings report; a test-redundancy recommendation.
   - **Honest status:** MVP — constructs proofs but does not run `kprove` yet (commands to do so are emitted); fragment K semantics per code (full per-language semantics is the roadmap); partial correctness.
-  - **The vision:** the fine-tuned-model end state (one line in → verified program out); link to the `formally-verified-sum` example repo.
+  - **The vision:** the fine-tuned-model end state (one line in → verified program out); link to the worked example.
   - **Layout** table + license.
 
 - [ ] **Step 2: Self-check** — benefits lead; status is honest; all internal links resolve.

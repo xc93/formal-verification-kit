@@ -1,5 +1,5 @@
 // =============================================================================
-//  mini-python-spec.k  -- verification of sum(n) as K `claim`s checkable by kprove.
+//  mini-python-spec.k  -- verification of sum_to_n(n) as K `claim`s checkable by kprove.
 //
 //    kompile mini-python.k --backend haskell
 //    kast    --backend haskell mini-python-spec.k    // confirm claims parse (1 AST)
@@ -69,13 +69,13 @@ module MINI-PYTHON-SPEC
   //   Defining sum and calling it on a non-negative N stores N*(N+1)/2.
   claim
     <k>
-      def sum ( n ) : INDENT
+      def sum_to_n ( n ) : INDENT
         s = 0
         i = 1
         while i <= n : INDENT s += i  i += 1 DEDENT
         return s
       DEDENT
-      result = sum ( N:Int )
+      result = sum_to_n ( N:Int )
     => .K ... </k>
     <funcs> .Map => ?_:Map </funcs>
     <store> result |-> (_:Int => N *Int (N +Int 1) /Int 2) </store>

@@ -243,7 +243,7 @@ follows. Its ingredients:
 - **Two claims**, both `[all-path]`:
   1. a **loop-invariant claim** over the `while` body (the circularity that proves
      itself), and
-  2. a **function claim** (the contract: `def sum` then `result = sum(N)` stores
+  2. a **function claim** (the contract: `def sum` then `result = sum_to_n(N)` stores
      `N*(N+1)/2`), which reuses the loop claim.
   Run `kprove`; success is **`#Top`**.
 - **The Bot / Bots shared-`klabel` list trick.** Evaluated arguments (`Int`s, which are

@@ -1,24 +1,29 @@
 // =============================================================================
 //  mini-python.k
 //  "mini Python": a MINIMAL K semantics for exactly the fragment of Python used
-//  by sum_to_n(n). Constructs covered (and nothing else): integer literals and names;
-//  + ; <= ; assignment x=e ; augmented assignment x+=e (== x=x+e on ints);
-//  while ; function def ; return ; function call.  NO `if` is introduced.
+//  by sum_to_n(n) in sum.py. Constructs covered (and NOTHING else): integer
+//  literals and names; + ; - ; >= ; assignment x=e ; augmented assignment
+//  x+=e and x-=e (== x=x+e / x=x-e on ints); while ; function def ; return ;
+//  function call.  NO `if` is introduced, and NO `<=`:  this program counts
+//  DOWN with `>=`, so it is the `>=` / `-=` mirror of the kit's up-counting
+//  `sum` example.
 //
-//  Adapted from K Tutorial Lesson 1.22, which verifies this very sum function;
-//  we keep its proven <k>/<store>/<funcs>/<stack> configuration and call/return
-//  machinery, and its Bot/Bots list construction.
+//  Adapted from K Tutorial Lesson 1.22 and the formal-verification-kit `sum`
+//  example. We keep, unchanged, its proven <k>/<store>/<funcs>/<stack>
+//  configuration, its call/return machinery, and its Bot/Bots argument-list
+//  construction; we swap the up-counting operators (<=, +=) for this program's
+//  down-counting ones, adding `>=`, binary `-`, and `-=` (and keeping `+`/`+=`,
+//  since `total += i` desugars through `+`).
 //
-//  INDENTATION NOTE (the one modeling decision):
-//    K's parser is not whitespace-sensitive, so it cannot apply Python's
-//    off-side rule directly. A real Python tokenizer emits INDENT/DEDENT tokens
-//    bracketing a suite; we model a suite exactly as that token-bracketed block:
-//    Suite ::= "INDENT" Stmt "DEDENT". Displayed Python indentation therefore
-//    corresponds 1-1 to INDENT ... DEDENT here. This affects only lexing/layout,
-//    never the semantics of any construct.
-//  += CAVEAT: the desugaring x += e => x = x + e is value-faithful only because
-//    targets here are side-effect-free simple names; general Python evaluates a
-//    += target once and dispatches to __iadd__.
+//  INDENTATION NOTE (the one modeling decision; identical to the sum example):
+//    K's parser is not whitespace-sensitive, so a real Python tokenizer's
+//    off-side rule is modeled by token-bracketing a suite as
+//    Suite ::= "INDENT" Stmt "DEDENT". Displayed Python indentation corresponds
+//    1-1 to INDENT ... DEDENT. This affects only lexing/layout, never semantics.
+//  += / -= CAVEAT: the desugarings  x += e => x = x + e  and  x -= e => x = x - e
+//    are value-faithful only because the targets here are side-effect-free simple
+//    names; general Python evaluates a += / -= target once and dispatches to
+//    __iadd__ / __isub__.
 // =============================================================================
 
 module MINI-PYTHON-SYNTAX
@@ -29,11 +34,12 @@ module MINI-PYTHON-SYNTAX
   // ---- expressions ----------------------------------------------------------
   syntax IExp ::= Id | Int
                 | "(" IExp ")"            [bracket]
-                > IExp "+" IExp           [seqstrict, left]   // arithmetic +
+                > IExp "+" IExp           [seqstrict, left]   // arithmetic +  (from +=)
+                | IExp "-" IExp           [seqstrict, left]   // arithmetic -  (from -=)
                 | Id "(" IExps ")"        [strict(2)]         // function call
 
   syntax BExp ::= Bool
-                | IExp "<=" IExp          [seqstrict]         // comparison <=
+                | IExp ">=" IExp          [seqstrict]         // comparison >=  (loop guard)
 
   // Argument/parameter lists. The shared klabel(exps) Bot/Bots construction makes
   // Ints (evaluated args, a KResult) and Ids (parameters) BOTH subsorts of the
@@ -53,7 +59,8 @@ module MINI-PYTHON-SYNTAX
   // and a Suite is itself a Stmt, so an INDENT...DEDENT block is self-delimiting
   // and the parser knows where a while/def body ends.
   syntax Stmt ::= Id "=" IExp                       [strict(2)]   // assignment
-                | Id "+=" IExp                                     // augmented
+                | Id "+=" IExp                                     // augmented +=
+                | Id "-=" IExp                                     // augmented -=
                 | "while" BExp ":" Suite                          // while
                 | "def" Id "(" Ids ")" ":" Suite                  // function def
                 | "return" IExp                     [seqstrict]   // return
@@ -83,8 +90,9 @@ module MINI-PYTHON
        <store> ... X |-> V ... </store>
 
   rule <k> I1:Int + I2:Int => I1 +Int I2 ... </k>
+  rule <k> I1:Int - I2:Int => I1 -Int I2 ... </k>
 
-  rule <k> I1:Int <= I2:Int => I1 <=Int I2 ... </k>
+  rule <k> I1:Int >= I2:Int => I1 >=Int I2 ... </k>
 
   // ---- statement sequencing (newline) ---------------------------------------
   rule <k> S1:Stmt S2:Stmt => S1 ~> S2 ... </k>
@@ -96,8 +104,9 @@ module MINI-PYTHON
   rule <k> X:Id = I:Int => .K ... </k>
        <store> STORE => STORE [ X <- I ] </store>
 
-  // Python augmented assignment on ints:  x += e   ==>   x = x + e
+  // Python augmented assignment on ints:
   rule <k> X:Id += E:IExp => X = X + E ... </k>
+  rule <k> X:Id -= E:IExp => X = X - E ... </k>
 
   // ---- while  (only the `while` construct; no `if` is introduced) -----------
   //   Evaluate a FRESH copy of the guard at the head of <k>, keeping an

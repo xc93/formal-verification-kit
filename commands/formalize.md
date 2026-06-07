@@ -63,9 +63,11 @@ Enumerate **every function** and **every loop** in the target. For each, infer t
 intended behavior is what the spec must capture; divergence between code and intent
 is exactly what becomes a finding in step 7.
 
-> Worked example: `examples/sum-up/summation.py` is one function `sum(n)` with one
+> Worked example (imitate the **closest** in [`examples/`](../examples/) — the
+> reference pair is [`sum-up`](../examples/sum-up/) / [`sum-down`](../examples/sum-down/)):
+> `examples/sum-up/sum.py` is one function `sum_to_n(n)` with one
 > `while` loop. Docstring "Return the sum of the integers from 1 to n" + the loop
-> `while i <= n: s += i; i += 1` ⇒ intended behavior `sum(n) = 1 + 2 + … + n`.
+> `while i <= n: s += i; i += 1` ⇒ intended behavior `sum_to_n(n) = 1 + 2 + … + n`.
 
 ### 3. Semantics — build a mini-X K fragment
 
@@ -150,7 +152,7 @@ paper over it to force a tidy claim.
 
 #### Worked example of a Findings report (the `sum` `n >= 0` discovery)
 
-Formalizing `summation.py` surfaced a missing precondition that the docstring and code
+Formalizing `sum.py` surfaced a missing precondition that the docstring and code
 never state:
 
 > **Finding — missing precondition `n >= 0`.**

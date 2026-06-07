@@ -6,8 +6,8 @@
 
 ## 1. Purpose & vision
 
-Turn the spec-and-verify process discovered in the `sum(n)` experiment
-(`formally-verified-sum`) into a **reusable, provider-neutral kit** that any
+Turn the spec-and-verify process discovered in the `sum_to_n(n)` experiment
+(the `sum` example) into a **reusable, provider-neutral kit** that any
 coding agent can use to formally specify and verify AI-generated code. It exposes
 two commands:
 

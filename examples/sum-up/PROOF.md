@@ -15,17 +15,15 @@ environment (MVP stopgap). Treat the result as "constructed" until §"Reproduce"
 turns it into "machine-verified."
 
 Artifacts referenced (same directory):
-[`summation.py`](summation.py) · [`mini-python.k`](mini-python.k) (the fragment
-semantics) · [`mini-python-spec.k`](mini-python-spec.k) (the K claims). The full
-upstream write-up with the hand proof, adversarial review, and reproducibility
-prompts lives in the **formally-verified-sum** repo
-(<https://github.com/grosu/formally-verified-sum>), files
-`sum-verification.md` and `sum-correctness-proof.md`.
+[`sum.py`](sum.py) · [`mini-python.k`](mini-python.k) (the fragment
+semantics) · [`mini-python-spec.k`](mini-python-spec.k) (the K claims) ·
+[`SPEC.md`](SPEC.md) and [`FINDINGS.md`](FINDINGS.md) (the `/formalize` outputs) ·
+[`PROMPTS.md`](PROMPTS.md) (the reproducibility prompts).
 
-The program ([`summation.py`](summation.py)):
+The program ([`sum.py`](sum.py)):
 
 ```python
-def sum(n):
+def sum_to_n(n):
     s = 0
     i = 1
     while i <= n:
@@ -43,7 +41,7 @@ configuration that *defines* `sum` and *calls* it on a non-negative `N`,
 execution reaches a terminated configuration whose `result` holds `N*(N+1)/2`.
 
 ```
-  φ_pre  ≡  ⟨ def sum(n): <body>   result = sum(N) ⟩_k  ⟨ result ↦ _ ⟩_store
+  φ_pre  ≡  ⟨ def sum_to_n(n): <body>   result = sum_to_n(N) ⟩_k  ⟨ result ↦ _ ⟩_store
             ⟨ .Map ⟩_funcs  ⟨ .List ⟩_stack    ∧   N ≥ 0
   φ_post ≡  ⟨ .K ⟩_k  ⟨ result ↦ N*(N+1)/2 ⟩_store  ⟨ ?_ ⟩_funcs  ⟨ .List ⟩_stack
 ```
@@ -53,13 +51,13 @@ As the **(SUM)** `claim` in [`mini-python-spec.k`](mini-python-spec.k):
 ```k
 claim
   <k>
-    def sum ( n ) : INDENT
+    def sum_to_n ( n ) : INDENT
       s = 0
       i = 1
       while i <= n : INDENT s += i  i += 1 DEDENT
       return s
     DEDENT
-    result = sum ( N:Int )
+    result = sum_to_n ( N:Int )
   => .K ... </k>
   <funcs> .Map => ?_:Map </funcs>
   <store> result |-> (_:Int => N *Int (N +Int 1) /Int 2) </store>
@@ -136,8 +134,8 @@ a real step, so the circularity discharges. The side condition **`I ≤ N+1` is
 necessary**: drop it and for `I ≥ N+2` the body still never runs but the formula
 is non-zero — false.
 
-**Prove (SUM).** Execute the program against the semantics: `def sum` files the
-body into `<funcs>`; `result = sum(N)` evaluates the argument, and `(call)`
+**Prove (SUM).** Execute the program against the semantics: `def sum_to_n` files the
+body into `<funcs>`; `result = sum_to_n(N)` evaluates the argument, and `(call)`
 pushes the caller's frame, gives the callee a fresh scope, and binds `n = N`. The
 body runs `s = 0`, `i = 1`, then the loop — and here we **use (LOOP) as a lemma**
 at `S = 0, I = 1` (its precondition `1 ≤ N+1` follows from `N ≥ 0`), making
@@ -214,7 +212,7 @@ Plainly, input → observed vs expected:
 So for `n = -3` the code yields `0` but the formula yields `3` — they disagree.
 **Recommendation:** either add a precondition `n ≥ 0` (the function is only
 defined on non-negative inputs — what `(SUM)`'s `requires N >=Int 0` encodes), or
-split the contract on the sign of `n` (loop never runs ⇒ `sum(n) = 0` for `n ≤ 0`;
+split the contract on the sign of `n` (loop never runs ⇒ `sum_to_n(n) = 0` for `n ≤ 0`;
 `N*(N+1)/2` for `n ≥ 0`). This was invisible to a quick read; the spec made it
 explicit.
 
@@ -225,19 +223,19 @@ explicit.
 > **A verified function is proven correct for all inputs in its domain**, so unit
 > tests that only re-check points inside that domain become redundant.
 
-Once `(SUM)` is machine-checked, it proves `sum(n) = n*(n+1)/2` for **every**
+Once `(SUM)` is machine-checked, it proves `sum_to_n(n) = n*(n+1)/2` for **every**
 `n ≥ 0`. Any unit test asserting a single in-domain point is subsumed:
 
-- `sum(5) == 15` → subsumed (`5*6/2 = 15`, and `5 ≥ 0`). **Redundant.**
-- `sum(1) == 1`  → subsumed (`1*2/2 = 1`,  and `1 ≥ 0`). **Redundant.**
-- `sum(0) == 0`  → subsumed (`0*1/2 = 0`,  and `0 ≥ 0`). **Redundant.**
+- `sum_to_n(5) == 15` → subsumed (`5*6/2 = 15`, and `5 ≥ 0`). **Redundant.**
+- `sum_to_n(1) == 1`  → subsumed (`1*2/2 = 1`,  and `1 ≥ 0`). **Redundant.**
+- `sum_to_n(0) == 0`  → subsumed (`0*1/2 = 0`,  and `0 ≥ 0`). **Redundant.**
 
 **CI saving.** These 3 in-domain unit tests only re-check points the single proof
 already covers for *all* `n ≥ 0`, so dropping them removes 3 test executions from
 every CI run — one proof replaces an unbounded family of point-checks. The saving
 compounds across every verified function.
 
-**Keep the out-of-domain boundary test.** A test like `sum(-1) == 0` (or any
+**Keep the out-of-domain boundary test.** A test like `sum_to_n(-1) == 0` (or any
 `n ≤ 0` boundary check) is **outside** the verified domain `n ≥ 0` and is exactly
 where the §5 finding lives — **keep it** (it pins behavior the proof does not
 cover, and guards against a regression if the sign split is later added).
@@ -265,10 +263,7 @@ A `#Top` result upgrades everything above from **constructed** to
 
 ---
 
-*Upstream full write-up (hand proof, adversarial review, reproducibility
-prompts): the **formally-verified-sum** repo
-(<https://github.com/grosu/formally-verified-sum>) —
-`sum-verification.md`, `sum-correctness-proof.md`.
+*Reproducibility prompts: [`PROMPTS.md`](PROMPTS.md).
 References: kframework.org; runtimeverification/k; K Tutorial Lesson 1.22.
 Roșu, "Matching Logic", LMCS 2017. Chen & Roșu, "Matching μ-Logic", LICS 2019.
 Roșu & Ștefănescu, FM 2012 / LICS 2013 (reachability logic & Circularity).*
