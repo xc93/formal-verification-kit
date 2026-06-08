@@ -303,6 +303,25 @@ spec is itself a bug signal" discipline.
 
 ---
 
+## Lists / arrays & spec-only abstraction functions
+
+To model a Python **list/array**, use K's builtin `List` (a *value* sort): `size(L)`,
+element read `L[I]`, functional update `L[I <- V]`, `ListItem(_)` / `.List`. Because
+`List` is a value (not a heap reference), Python's copy semantics and **non-aliasing**
+fall out for free — `list(L)` is identity, and an index-assign rebinds the variable to a
+new `List`. (Generalize the call machinery's evaluated-args list from `Int` to `KResult`
+so a `List` value can be passed.)
+
+When a postcondition is **relational** (e.g. *sorted*, *permutation*) rather than an
+arithmetic closed form, declare **spec-only abstraction functions** `[function]` in the
+`VERIFICATION` module and use them in `ensures` — e.g. `isSorted(List)` (an inductive
+`Bool` function) and a multiset `bag(List)` (a value→count `Map`, so `bag(X) ==K bag(Y)`
+*is* "X is a permutation of Y"). These are **spec vocabulary, not language constructs**.
+**Caveat:** the bundled `[simplification]` tier does *not* discharge inductive-predicate
+or multiset VCs — state those as `[ESCALATION BOUNDARY]` obligations and route to the
+papers; do **not** fake them as `[trusted]`. Worked example:
+[`../examples/insertion-sort/`](../examples/insertion-sort/).
+
 ## LIMITS + ESCALATION
 
 This file is the **fast path**: an imperative function over ints/maps/lists, with a

@@ -27,6 +27,7 @@ These examples do double duty:
 | [`sum-up/`](sum-up/) | Python | Count-**up** loop (`i` from `1` to `n`); **additive, polynomial** loop invariant + its circularity (`I ≤ N+1`); the `n < 0` missing-precondition *Finding* | constructed |
 | [`sum-down/`](sum-down/) | Python | Count-**down** loop; the **"remaining-work"** invariant (`I ≥ 0`) — same result `n·(n+1)/2`, a genuinely **different invariant shape** than `sum-up` (`n` drops out of the loop spec; no init VC; only one live simplification) | constructed |
 | [`sum-recursive/`](sum-recursive/) | Python | **Recursion** (no loop): the circularity is on the **recursive call's contract** `(REC)` — same result `n·(n+1)/2`. Uses `if`/`==`; *validates* `n<0` (a **positive** Finding — it fixes the loops' silent bug); plus a measured `RecursionError` depth-limit Finding | constructed |
+| [`insertion-sort/`](insertion-sort/) | Python | **Arrays + nested loops + a relational spec** — returns a sorted **permutation** (`isSorted` + multiset `bag`). Three nested circularities `(SORT)`/`(OUTER)`/`(INNER)`. The first example to hit the **escalation boundary** *honestly*: the inductive/multiset VCs are stated as `[ESCALATION BOUNDARY]`, **not** faked `[trusted]`. Rich Findings (total-order/NaN bug; stability hinges on strict `>`) | constructed (escalation-bounded) |
 
 **The `sum-*` cluster — one contract, many implementations.** `sum-up`, `sum-down`,
 and `sum-recursive` all compute the *same* spec (`n·(n+1)/2`) — by counting up, by
@@ -35,8 +36,9 @@ the contract does not** (loop invariant vs. loop invariant vs. *recursive-call
 contract*). That contrast is the teaching payload — see each example's `README.md`.
 
 *Other roadmap shapes worth adding next (each a new pattern): a **product /
-factorial** (non-polynomial, multiplicative VC) and an **array / list loop** (sum /
-max / search over a sequence).*
+factorial** (non-polynomial, multiplicative VC); and **machine-checking** the
+inductive-list / multiset obligations that `insertion-sort` leaves open (it needs an
+inductive list/multiset theory — see its `[ESCALATION BOUNDARY]` lemmas).*
 
 ## Anatomy of an example
 
@@ -113,3 +115,8 @@ deliberately cross-normalized, so it is more uniform than later examples should 
   toolchain.
 - **constructed** — the proof is written and reviewed but **not** yet machine-checked
   (this is the kit's MVP default; see the repo [`README.md`](../README.md)).
+- **constructed (escalation-bounded)** — *doubly* short of machine-checked: beyond not
+  running `kprove`, some VCs need a theory the bundled simplification tier lacks (an
+  inductive list/multiset theory), so they are stated as explicit `[ESCALATION
+  BOUNDARY]` obligations rather than discharged or faked `[trusted]`. (E.g.
+  `insertion-sort`.)

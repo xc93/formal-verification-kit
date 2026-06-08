@@ -120,6 +120,13 @@ alongside the VCs.
 > postcondition that doesn't hold for all in-domain inputs, a loop with no clean
 > closed form — surface each one (Step 5). Difficulty proving a clean contract is
 > itself a strong bug signal (benefit 2).
+>
+> But distinguish *correctness* gaps from **capability** gaps. When a VC is beyond
+> the bundled tier (an inductive-predicate or multiset fact — e.g. sortedness /
+> permutation), that is **not** a code bug: state it as an explicit `[ESCALATION
+> BOUNDARY]` obligation, discharge everything the bundled tier *can*, and route the
+> rest to the papers — **never admit it as `[trusted]`** (that fakes confidence the
+> kit does not have). See [`../examples/insertion-sort/`](../examples/insertion-sort/).
 
 ### Step 3 — Test-redundancy report (benefit 1)
 

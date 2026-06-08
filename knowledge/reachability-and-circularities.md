@@ -178,6 +178,16 @@ This is what `/formalize` then `/verify` actually do, step by step.
 labeled **"constructed, not machine-checked"** (the MVP does not run the
 toolchain), plus the test-redundancy and Findings reports.
 
+**Beyond arithmetic — predicates and nested loops.** A postcondition need not be a
+closed form: it can be a **predicate** (e.g. *sorted*, *permutation*) written as a
+**spec-only abstraction function** declared `[function]` in the `VERIFICATION`
+module — e.g. `isSorted(List)` or a multiset `bag(List)`. And **nested loops nest
+their circularities**: one `claim` per loop, the **inner used as a lemma by the
+outer** (just as a recursive function's contract is reused by its caller). See
+[`../examples/insertion-sort/`](../examples/insertion-sort/) — the three claims
+`(SORT)` / `(OUTER)` / `(INNER)` — for both. (Discharging the *inductive* predicate
+VCs may hit the escalation boundary — see §7.)
+
 ---
 
 ## 5. Partial vs total correctness
@@ -239,12 +249,27 @@ the recursive call's contract `(REC)`. It starts to strain, and you should
   tier in §6 discharges *polynomial* facts and division-by-even; an arbitrary
   multiplicative recurrence needs a recursively-defined symbol and its own
   `[simplification]` lemmas, which the recipe does not yet supply.
-- **Recursive data structures** — lists, trees, heaps — which need separation /
-  heap abstractions and inductively defined predicates (often `μ`, the least
-  fixpoint from Matching μ-Logic).
+- **Recursive / inductive data structures** — lists, trees, heaps — and
+  **relational postconditions over them** (sortedness, permutation), which need
+  inductively defined predicates and multiset reasoning (often `μ`, the least
+  fixpoint from Matching μ-Logic). See
+  [`../examples/insertion-sort/`](../examples/insertion-sort/), which models a Python
+  list (K's `List` value sort) and a **nested-loop** sort and reaches exactly this
+  boundary.
 - **Binders** (`λ`, quantifiers, local scoping captured semantically).
 - **Concurrency / nondeterminism**, where `[all-path]` vs one-path reachability
   genuinely diverge and the determinism shortcut no longer applies.
+
+**Escalation done *right* (the pattern to copy).** Escalating is **not** giving up.
+[`../examples/insertion-sort/`](../examples/insertion-sort/) shows the discipline: build
+the mini-X semantics, state **all** claims well-formed, **define the spec-only
+abstractions** the postcondition needs (there: `isSorted` as an inductive `Bool`
+function, and `bag` as a multiset count-`Map`), discharge every VC the §6 bundled tier
+*can* (in-bounds, linear), and mark the rest as explicit `[ESCALATION BOUNDARY]`
+obligations — **never fake them as `[trusted]`**, which would manufacture confidence the
+kit does not have. Then route those named obligations to the papers below. The
+deliverable stays honest *and* complete: the open obligations are **specified**, not
+hidden.
 
 **Escalation path (first-class).** When the recipe doesn't cover your case, go to
 [`sources.md`](sources.md) — route **by topic** to the matching-logic papers:
