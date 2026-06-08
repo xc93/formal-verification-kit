@@ -108,7 +108,7 @@ Running `/formalize` then `/verify` produces, written alongside your code:
 This is one of a **growing library of worked examples** — browse the catalog in
 [`examples/`](examples/). Each takes a real function from source code all the way
 to a constructed proof, file for file. The first members are the **`sum-*`
-cluster** — [`sum-up/`](examples/sum-up/) and [`sum-down/`](examples/sum-down/)
+cluster** — [`sum-up/`](examples/02-sum-up/) and [`sum-down/`](examples/03-sum-down/)
 compute the *same* contract (`n·(n+1)/2`) by counting **up** vs. **down**, showing
 that **the proof obligations differ even when the spec does not**. More are added
 over time — and the vetted, machine-checked ones double as the fine-tuning corpus
@@ -161,7 +161,7 @@ an agent-driven workflow.
 | [`knowledge/k-framework.md`](knowledge/k-framework.md) | K primer: config cells, rules, claims, `kprove`, `/Int`. |
 | [`knowledge/reachability-and-circularities.md`](knowledge/reachability-and-circularities.md) | Reachability logic, the Circularity rule, the proof recipe. |
 | [`knowledge/sources.md`](knowledge/sources.md) | Live source index + the `--refresh` escalation path. |
-| [`examples/`](examples/) | A **growing library** of worked examples — [catalog + how-to-add](examples/README.md). The first is [`sum-up/`](examples/sum-up/) (Python `sum`), the template the commands imitate. |
+| [`examples/`](examples/) | A **growing library** of worked examples — [catalog + how-to-add](examples/README.md). The first is [`sum-up/`](examples/02-sum-up/) (Python `sum`), the template the commands imitate. |
 | [`LICENSE`](LICENSE) | MIT. |
 | `docs/` | Internal design spec — not part of the user-facing kit. |
 

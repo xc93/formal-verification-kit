@@ -9,8 +9,8 @@ semantics — treat this as a starting point and escalate via [`sources.md`](sou
 (see [LIMITS + ESCALATION](#limits--escalation)).
 
 Concrete companion to read alongside this file: the worked sum example,
-[`../examples/sum-up/mini-python.k`](../examples/sum-up/mini-python.k) (the semantics) and
-[`../examples/sum-up/mini-python-spec.k`](../examples/sum-up/mini-python-spec.k) (the claims).
+[`../examples/02-sum-up/mini-python.k`](../examples/02-sum-up/mini-python.k) (the semantics) and
+[`../examples/02-sum-up/mini-python-spec.k`](../examples/02-sum-up/mini-python-spec.k) (the claims).
 Everything below is grounded in those two files and in K Tutorial **Lesson 1.22**
 (Tutorial 1, Lesson 22 — "Basics of Deductive Program Verification using K").
 
@@ -320,7 +320,7 @@ arithmetic closed form, declare **spec-only abstraction functions** `[function]`
 **Caveat:** the bundled `[simplification]` tier does *not* discharge inductive-predicate
 or multiset VCs — state those as `[ESCALATION BOUNDARY]` obligations and route to the
 papers; do **not** fake them as `[trusted]`. Worked example:
-[`../examples/insertion-sort/`](../examples/insertion-sort/).
+[`../examples/12-insertion-sort/`](../examples/12-insertion-sort/).
 
 ## LIMITS + ESCALATION
 

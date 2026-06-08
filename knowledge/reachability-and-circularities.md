@@ -7,7 +7,7 @@ follow. Read [`matching-logic.md`](matching-logic.md) for the logic underneath
 (patterns-as-sets, the connectives) and [`k-framework.md`](k-framework.md) for how
 this is written as K `claim`s, `kompile`/`kprove`, `seqstrict`/heating, and
 `[simplification]`. The fully worked instance lives in
-[`../examples/sum-up/`](../examples/sum-up/).
+[`../examples/02-sum-up/`](../examples/02-sum-up/).
 
 > **Fast-path disclaimer.** This is a *distilled* recipe tuned for the common
 > case: imperative functions with simple, counting `while`/`for` loops over
@@ -45,7 +45,7 @@ syntactic object. The win is unification:
   one pattern, manipulated by one set of rules.
 
 A K `claim` *is* a reachability rule; the worked
-[`../examples/sum-up/mini-python-spec.k`](../examples/sum-up/mini-python-spec.k) is two
+[`../examples/02-sum-up/mini-python-spec.k`](../examples/02-sum-up/mini-python-spec.k) is two
 of them — the function contract `(SUM)` and the loop circularity `(LOOP)`.
 
 ---
@@ -104,7 +104,7 @@ exit. Here, instead:
   expression in the claim's postcondition**, generalized over the
   accumulator/counter (e.g. the running sum `S + (I+N)·(N−I+1)/2`).
 
-In [`../examples/sum-up/`](../examples/sum-up/) this is the `(LOOP)` claim: running the
+In [`../examples/02-sum-up/`](../examples/02-sum-up/) this is the `(LOOP)` claim: running the
 loop from counter `i = I` (with side condition `I ≤ N+1`) adds
 `Σ_{k=I}^{N} k = (I+N)·(N−I+1)/2` to `s` and leaves `i = N+1`. Proving it, the
 guard-evaluation step discharges guardedness; the *guard-true* branch invokes
@@ -117,7 +117,7 @@ has a *back-edge*: the recursive call. So the **function's own contract is the
 coinductive hypothesis** — `f(N) ⇒ result(N)` discharges its inner call `f(N−1)`.
 Guardedness comes from the **`call` step** (entering the body) taken before the
 hypothesis is reused, exactly as guard-evaluation does for a loop; the **base case**
-is the *exit* branch. See [`../examples/sum-recursive/`](../examples/sum-recursive/):
+is the *exit* branch. See [`../examples/06-sum-recursive/`](../examples/06-sum-recursive/):
 the `(REC)` claim `sum_recursive(N) ⇒ N*(N+1)/2` (side condition `N ≥ 0`) discharges
 `sum_recursive(N−1)` on the recursive branch, with `n == 0` as the base case.
 
@@ -131,7 +131,7 @@ This is what `/formalize` then `/verify` actually do, step by step.
    semantics covering *only* the constructs the target code uses — the "mini-X"
    stopgap, exactly as the example builds *mini Python*. Syntax + configuration
    cells + rewrite rules. See [`k-framework.md`](k-framework.md) for how, and
-   [`../examples/sum-up/mini-python.k`](../examples/sum-up/mini-python.k) for a complete
+   [`../examples/02-sum-up/mini-python.k`](../examples/02-sum-up/mini-python.k) for a complete
    one. *(Roadmap: full per-language K semantics replaces this step.)*
 
 2. **State the function spec as a reachability rule** `φ_pre ⇒ φ_post`. A K
@@ -153,7 +153,7 @@ This is what `/formalize` then `/verify` actually do, step by step.
    instead: `f(args) ⇒ result`, generalized over the symbolic argument(s), with the
    soundness precondition (e.g. `N ≥ 0`). K uses it as its own hypothesis to discharge
    the recursive call; the *base case* is the non-recursive branch. See `(REC)` in
-   [`../examples/sum-recursive/`](../examples/sum-recursive/).
+   [`../examples/06-sum-recursive/`](../examples/06-sum-recursive/).
 
 4. **Prove it** by symbolic execution against the semantics:
    - Drive the `<k>` cell with the rules: `seqstrict` **heating/cooling** evaluates
@@ -184,7 +184,7 @@ closed form: it can be a **predicate** (e.g. *sorted*, *permutation*) written as
 module — e.g. `isSorted(List)` or a multiset `bag(List)`. And **nested loops nest
 their circularities**: one `claim` per loop, the **inner used as a lemma by the
 outer** (just as a recursive function's contract is reused by its caller). See
-[`../examples/insertion-sort/`](../examples/insertion-sort/) — the three claims
+[`../examples/12-insertion-sort/`](../examples/12-insertion-sort/) — the three claims
 `(SORT)` / `(OUTER)` / `(INNER)` — for both. (Discharging the *inductive* predicate
 VCs may hit the escalation boundary — see §7.)
 
@@ -241,7 +241,7 @@ tiers:
 The recipe handles **simple counting loops** *and* **simple recursion** (one
 accumulator/argument, integer/map state, a polynomial closed form) well — that is
 its sweet spot. **Recursion control flow is now covered** — see
-[`../examples/sum-recursive/`](../examples/sum-recursive/), where the circularity is on
+[`../examples/06-sum-recursive/`](../examples/06-sum-recursive/), where the circularity is on
 the recursive call's contract `(REC)`. It starts to strain, and you should
 **escalate**, when the code involves:
 
@@ -253,7 +253,7 @@ the recursive call's contract `(REC)`. It starts to strain, and you should
   **relational postconditions over them** (sortedness, permutation), which need
   inductively defined predicates and multiset reasoning (often `μ`, the least
   fixpoint from Matching μ-Logic). See
-  [`../examples/insertion-sort/`](../examples/insertion-sort/), which models a Python
+  [`../examples/12-insertion-sort/`](../examples/12-insertion-sort/), which models a Python
   list (K's `List` value sort) and a **nested-loop** sort and reaches exactly this
   boundary.
 - **Binders** (`λ`, quantifiers, local scoping captured semantically).
@@ -261,7 +261,7 @@ the recursive call's contract `(REC)`. It starts to strain, and you should
   genuinely diverge and the determinism shortcut no longer applies.
 
 **Escalation done *right* (the pattern to copy).** Escalating is **not** giving up.
-[`../examples/insertion-sort/`](../examples/insertion-sort/) shows the discipline: build
+[`../examples/12-insertion-sort/`](../examples/12-insertion-sort/) shows the discipline: build
 the mini-X semantics, state **all** claims well-formed, **define the spec-only
 abstractions** the postcondition needs (there: `isSorted` as an inductive `Bool`
 function, and `bag` as a multiset count-`Map`), discharge every VC the §6 bundled tier
@@ -285,9 +285,9 @@ example** — the example library is the growth lever and will grow.
 
 ### Cross-references
 
-- [`../examples/`](../examples/) — the worked instances: [`sum-up`](../examples/sum-up/)
-  / [`sum-down`](../examples/sum-down/) (loop circularities, `I ≤ N+1` / `I ≥ 0`) and
-  [`sum-recursive`](../examples/sum-recursive/) (the **recursion** circularity `(REC)`).
+- [`../examples/`](../examples/) — the worked instances: [`sum-up`](../examples/02-sum-up/)
+  / [`sum-down`](../examples/03-sum-down/) (loop circularities, `I ≤ N+1` / `I ≥ 0`) and
+  [`sum-recursive`](../examples/06-sum-recursive/) (the **recursion** circularity `(REC)`).
 - [`matching-logic.md`](matching-logic.md) — the underlying logic and connectives.
 - [`k-framework.md`](k-framework.md) — `claim` syntax, `kprove`, heating,
   `[simplification]`, `/Int`.

@@ -64,8 +64,8 @@ intended behavior is what the spec must capture; divergence between code and int
 is exactly what becomes a finding in step 7.
 
 > Worked example (imitate the **closest** in [`examples/`](../examples/) — the
-> reference pair is [`sum-up`](../examples/sum-up/) / [`sum-down`](../examples/sum-down/)):
-> `examples/sum-up/sum.py` is one function `sum_to_n(n)` with one
+> reference pair is [`sum-up`](../examples/02-sum-up/) / [`sum-down`](../examples/03-sum-down/)):
+> `examples/02-sum-up/sum.py` is one function `sum_to_n(n)` with one
 > `while` loop. Docstring "Return the sum of the integers from 1 to n" + the loop
 > `while i <= n: s += i; i += 1` ⇒ intended behavior `sum_to_n(n) = 1 + 2 + … + n`.
 
@@ -73,7 +73,7 @@ is exactly what becomes a finding in step 7.
 
 Build a **minimal K semantics of just the language fragment the code uses** — the
 "mini-X" approach (mini-Python, mini-TS, …). Imitate
-[`examples/sum-up/mini-python.k`](../examples/sum-up/mini-python.k): a `*-SYNTAX` module for
+[`examples/02-sum-up/mini-python.k`](../examples/02-sum-up/mini-python.k): a `*-SYNTAX` module for
 the constructs that actually appear (and *nothing else*), and a semantics module with a
 `configuration` of cells (e.g. `<k>`, `<store>`, `<funcs>`, `<stack>`) and one rewrite
 `rule` per construct. Cover only what the code touches — `sum` needs integer
@@ -93,7 +93,7 @@ For each function write its contract as a **reachability rule** `φ_pre ⇒ φ_p
 (read `⇒` as the reachability arrow "every execution from a `φ_pre` state reaches a
 `φ_post` state" — see [`knowledge/reachability-and-circularities.md`](../knowledge/reachability-and-circularities.md)),
 expressed as a K `claim` over the mini-X semantics. Imitate the `(SUM)` claim in
-[`examples/sum-up/mini-python-spec.k`](../examples/sum-up/mini-python-spec.k): the
+[`examples/02-sum-up/mini-python-spec.k`](../examples/02-sum-up/mini-python-spec.k): the
 left-hand `<k>` defines the function and calls it on a symbolic argument; `requires`
 states the **precondition**; the cells on the right state the **postcondition** (the
 result binding it must reach). Use uppercase math variables (`S`, `I`, `N`) for logical
@@ -116,7 +116,7 @@ the module as a coinduction hypothesis (a circularity)**, so the loop claim disc
 circularity** — `f(args) ⇒ result`, generalized over the symbolic argument(s), with
 the soundness precondition (e.g. `N >= 0`). K uses it as its own hypothesis to
 discharge the recursive call; the base case is the non-recursive branch. See the
-`(REC)` claim in [`../examples/sum-recursive/`](../examples/sum-recursive/).
+`(REC)` claim in [`../examples/06-sum-recursive/`](../examples/06-sum-recursive/).
 
 > **Input-validation guards & exceptions (a common real-code pattern).** When code
 > begins with guards like `isinstance(...)` / `assert` / `if n < 0: raise ...`, those
@@ -125,7 +125,7 @@ discharge the recursive call; the base case is the non-recursive branch. See the
 > escalation case, out of the fragment) — and turn each guard into a **Finding**.
 > Often it's a *positive* finding: the guard **enforces** the precondition the spec
 > needs (`if n < 0: raise` enforces `requires N >= 0`). See
-> [`../examples/sum-recursive/`](../examples/sum-recursive/) (its `isinstance` /
+> [`../examples/06-sum-recursive/`](../examples/06-sum-recursive/) (its `isinstance` /
 > `ValueError` guards become Findings 1–2).
 
 > For `sum`'s loop: generalize over `s = S`, `i = I`, `n = N`; the invariant says

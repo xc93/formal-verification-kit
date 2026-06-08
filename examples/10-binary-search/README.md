@@ -1,0 +1,22 @@
+# binary_search(a, x) — formally specified & verified
+
+**Status:** constructed (escalation-bounded)
+
+Iterative binary search over a sorted list. Precondition `isSorted(a)`; the loop invariant narrows the window and maintains 'if x is in a then x is in a[lo:hi]'. The 'found' half (`return i => a[i]==x`) is bundled-tier clean; the 'not present' half (membership over a sorted list) needs an inductive/quantified array predicate.
+
+**Demonstrates:** Arrays with a **sortedness precondition** (mirror of insertion-sort's postcondition) and a **narrowing-window** invariant. The found half is clean; the not-present/membership half escalates.
+
+**Key findings:** `mid=(lo+hi)//2` — no overflow in Python, but the historic **C/Java overflow bug** on a fixed-width port; an unstated sortedness precondition (unsorted input gives a silent false negative).
+
+| File | What it is |
+|---|---|
+| [`binary_search.py`](binary_search.py) | the program — **self-contained** (no libraries or builtins) |
+| [`mini-python.k`](mini-python.k) | minimal K semantics of just the constructs it uses |
+| [`mini-python-spec.k`](mini-python-spec.k) | the K reachability claims (contract + circularities) |
+| [`SPEC.md`](SPEC.md) | plain-English spec note |
+| [`FINDINGS.md`](FINDINGS.md) | the Findings (bugs / preconditions / corner cases) |
+| [`PROOF.md`](PROOF.md) | the constructed proof + test-redundancy report |
+| [`PROMPTS.md`](PROMPTS.md) | the prompts that reproduce this example |
+
+Produced cold by an isolated newcomer — see the kit's
+[examples/README.md](../README.md) -> *How examples are produced*.

@@ -35,7 +35,7 @@ With no arguments it operates on the whole current program / each function in it
 > [`../knowledge/matching-logic.md`](../knowledge/matching-logic.md) (the
 > connectives). The fully worked target shapes are in
 > [`../examples/`](../examples/) — pick the **closest by shape** (the reference pair
-> is [`sum-up`](../examples/sum-up/PROOF.md) / [`sum-down`](../examples/sum-down/PROOF.md)).
+> is [`sum-up`](../examples/02-sum-up/PROOF.md) / [`sum-down`](../examples/03-sum-down/PROOF.md)).
 > These distilled primers
 > are a **fast path for the common case** (imperative functions, simple counting
 > loops); for recursion, recursive data structures, binders, or concurrency they
@@ -57,7 +57,7 @@ contract + each loop circularity), and the spec note — **run
 Confirm each function has a reachability-rule `claim` (`φ_pre ⇒ φ_post`, with the
 `requires` precondition) and each loop has its circularity `claim` (generalized
 over accumulator/counter, with the soundness side condition). The worked pair is
-[`../examples/sum-up/mini-python-spec.k`](../examples/sum-up/mini-python-spec.k):
+[`../examples/02-sum-up/mini-python-spec.k`](../examples/02-sum-up/mini-python-spec.k):
 `(SUM)` (function contract, `requires N >=Int 0`, result `N*(N+1)/2`) and
 `(LOOP)` (loop circularity, side condition `I <=Int N +Int 1`).
 
@@ -88,7 +88,7 @@ Three moving parts:
   land on the claimed post-state. *(For a recursive function it is the same move:
   the genuine step is the `call`, the case-split is base vs. recursive branch, and
   you invoke the contract on the recursive call — see
-  [`../examples/sum-recursive/`](../examples/sum-recursive/).)* The closed-form expression in the postcondition
+  [`../examples/06-sum-recursive/`](../examples/06-sum-recursive/).)* The closed-form expression in the postcondition
   (e.g. the running sum `(I+N)*(N−I+1)/2`) plays the role the classical loop
   invariant used to.
 
@@ -126,7 +126,7 @@ alongside the VCs.
 > permutation), that is **not** a code bug: state it as an explicit `[ESCALATION
 > BOUNDARY]` obligation, discharge everything the bundled tier *can*, and route the
 > rest to the papers — **never admit it as `[trusted]`** (that fakes confidence the
-> kit does not have). See [`../examples/insertion-sort/`](../examples/insertion-sort/).
+> kit does not have). See [`../examples/12-insertion-sort/`](../examples/12-insertion-sort/).
 
 ### Step 3 — Test-redundancy report (benefit 1)
 
@@ -153,7 +153,7 @@ Map the project's existing tests onto the verified spec and classify each:
   later option.)
 
 The worked instance is the test-redundancy snippet in
-[`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md) §6 — `sum_to_n(5)==15`,
+[`../examples/02-sum-up/PROOF.md`](../examples/02-sum-up/PROOF.md) §6 — `sum_to_n(5)==15`,
 `sum_to_n(1)==1`, `sum_to_n(0)==0` flagged redundant; the out-of-domain `sum_to_n(-1)==0`
 boundary test **kept**. Imitate that shape.
 
@@ -162,7 +162,7 @@ boundary test **kept**. Imitate that shape.
 Write out, alongside the code, everything needed to machine-check the proof later:
 
 - the **proof write-up** (condensed, in the shape of
-  [`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md): function claim, loop
+  [`../examples/02-sum-up/PROOF.md`](../examples/02-sum-up/PROOF.md): function claim, loop
   circularity, short English proof, machine-detailed sketch, and the two
   plain-language benefit payoffs);
 - the **`.k` files** — the fragment semantics `<mod>.k` and the claims
@@ -197,7 +197,7 @@ Produce the human-readable report:
   (benefit 2). A side condition you were forced to add (like `I ≤ N+1`, or a
   precondition like `N ≥ 0`) is usually a precondition the code silently assumed
   and never checked; report it with a concrete `input → observed vs expected`
-  example, the way [`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md) §5 does
+  example, the way [`../examples/02-sum-up/PROOF.md`](../examples/02-sum-up/PROOF.md) §5 does
   for the `n < 0` case.
 
 ---
@@ -220,7 +220,7 @@ The MVP **constructs** the proof but **does NOT run `kprove`**. Therefore:
   check.
 
 See the worked conditioning in
-[`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md) §6 ("Conditioned on
+[`../examples/02-sum-up/PROOF.md`](../examples/02-sum-up/PROOF.md) §6 ("Conditioned on
 machine-checking") and its "Reproduce the machine check" section.
 
 ---
@@ -250,7 +250,7 @@ is the growth lever and will grow.
   `kprove`, `seqstrict`/heating, `[simplification]`, `/Int`.
 - [`../knowledge/matching-logic.md`](../knowledge/matching-logic.md) — the
   underlying logic and the `#And`/`#Or`/`#Equals`/`#Not`/`#Exists` connectives.
-- [`../examples/sum-up/PROOF.md`](../examples/sum-up/PROOF.md) — the worked target: proof
+- [`../examples/02-sum-up/PROOF.md`](../examples/02-sum-up/PROOF.md) — the worked target: proof
   shape, Findings (benefit 2), and the test-redundancy snippet (benefit 1).
 - [`../knowledge/sources.md`](../knowledge/sources.md) — papers and the `--refresh`
   escalation path.
