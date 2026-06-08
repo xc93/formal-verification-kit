@@ -66,14 +66,17 @@ https://github.com/grosu/formal-verification-kit`, then paste:* "Read
 
 **3. Find the specs — and the bugs:**
 
-> /formalize
+> run /formalize
+
+*Say **run /formalize**, not a bare `/formalize` — some agents (Claude Code, etc.)
+treat a leading `/` as a built-in slash command and reject an unknown one.*
 
 Then read the **Findings report** — the missing preconditions, corner cases, and
 likely bugs it surfaced. (You get this even if you never read the proof.)
 
 **4. Construct the proof — and trim redundant tests:**
 
-> /verify
+> run /verify
 
 Then read the **proof** and the **test-redundancy** recommendation (which tests the
 proof makes redundant).

@@ -14,6 +14,7 @@ Before using these commands, read [`knowledge/matching-logic.md`](knowledge/matc
 
 - When the user says **`/formalize`**, follow [`commands/formalize.md`](commands/formalize.md).
 - When the user says **`/verify`**, follow [`commands/verify.md`](commands/verify.md).
+- Users usually phrase these as **"run /formalize"** / **"run /verify"** (a leading bare `/` can be intercepted as a slash command). Treat *"run /formalize"*, *"please formalize this"*, *"/formalize the project"*, etc. as the same trigger.
 - **No arguments yet** → operate on the whole project / each function in it.
 
 ## TEMPLATE
