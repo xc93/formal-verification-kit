@@ -73,13 +73,14 @@ This lets FVK build on everything the coding pass learned while keeping the base
 
 1. Build the public intent ledger first.
 2. Treat the current implementation as a candidate, not the specification.
-3. Treat public/in-repo tests as evidence, not an oracle. If a test encodes behavior the public issue or intent describes as buggy, mark that obligation **SUSPECT** and explain the conflict instead of preserving legacy behavior.
+3. Treat public/in-repo tests **and quoted pre-fix / "before" displays** as evidence, not an oracle. If a test or shown current-behavior output encodes what the public issue or intent describes as buggy, mark that obligation **SUSPECT** and explain the conflict instead of preserving legacy behavior — the bug report *is* the contradiction, so a test you would have to delete to satisfy the intent is a positive bug signal, not a reason to keep V1.
 4. If a clean spec or proof obligation cannot be written without forcing legacy behavior, record a Finding; revise the code only when the public intent justifies it.
 5. Do not edit tests unless the user asks. The default repair target is production code.
+6. Audit against the **full intent** — the whole problem statement plus the docstring / API contract / public names — not just the issue sentence. The driving question is "what is still wrong versus the full intent?", not "is V1 sound on the reported issue?" (Balance: every claimed wrongness must still trace to public-intent evidence.)
 
 ## TEMPLATE
 
-Imitate the **closest example by shape** in [`examples/`](examples/) — start from its [catalog](examples/README.md). The reference pair is [`examples/02-sum-up/`](examples/02-sum-up/) (count-up / additive invariant) and [`examples/03-sum-down/`](examples/03-sum-down/) (count-down / remaining-work invariant); each gives the file-by-file template — mini-X semantics, reachability/circularity claims, spec note, findings, constructed proof. For every target, build the public intent ledger first, then make the `.k` claims trace back to it. Question any precondition, postcondition, invariant, ordering rule, or proof side condition that comes from the current implementation and looks different from the human requirement — unless it has public intent evidence or is an explicitly named default-domain assumption.
+If `examples/` are available in your workspace, imitate the **closest example by shape** — start from its [catalog](examples/README.md); the reference pair is [`examples/02-sum-up/`](examples/02-sum-up/) (count-up / additive invariant) and [`examples/03-sum-down/`](examples/03-sum-down/) (count-down / remaining-work invariant), each giving the file-by-file template (mini-X semantics, reachability/circularity claims, spec note, findings, constructed proof). If `examples/` are **not** present, follow the file-by-file shape described in [`commands/formalize.md`](commands/formalize.md) and [`commands/verify.md`](commands/verify.md) directly. Either way, for every target build the public intent ledger first, then make the `.k` claims trace back to it. Question any precondition, postcondition, invariant, ordering rule, or proof side condition that comes from the current implementation and looks different from the human requirement — unless it has public intent evidence or is an explicitly named default-domain assumption.
 
 ---
 
