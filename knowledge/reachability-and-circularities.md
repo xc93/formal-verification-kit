@@ -88,6 +88,8 @@ What `/formalize` then `/verify` actually do, step by step.
 
 **Beyond arithmetic — predicates and nested loops.** A postcondition need not be a closed form: it can be a **predicate** (*sorted*, *permutation*) written as a **spec-only abstraction function** declared `[function]` in `VERIFICATION` — e.g. `isSorted(List)` or a multiset `bag(List)`. And **nested loops nest their circularities**: one `claim` per loop, the **inner used as a lemma by the outer** (just as a recursive function's contract is reused by its caller). See [`../examples/12-insertion-sort/`](../examples/12-insertion-sort/) — claims `(SORT)` / `(OUTER)` / `(INNER)` — for both. (Discharging the *inductive* predicate VCs may hit the escalation boundary — §7.)
 
+Whichever abstraction you choose, it must **still distinguish pass from fail for the property under test** — abstracting away state is fine, abstracting away the property is not. If the axis the change manipulates collapses into an opaque symbol, every obligation over it is vacuous; confirm a concrete passing and a concrete failing instance map to *different* abstract values, or declare the property un-assessable as an `[ESCALATION BOUNDARY]`. Full discriminator test and the "validate against an independent reference, not one derived from the artifact under test" rule: [`k-framework.md`](k-framework.md) (Lists / arrays & spec-only abstraction functions).
+
 ---
 
 ## 5. Partial vs total correctness
