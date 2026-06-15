@@ -41,6 +41,8 @@ Treat executable snippets, reference implementations, and workaround code in the
 
 Do **not** invent list-order compatibility from set/membership tests — those support completeness, not ordering. Any ordered expected value must cite prompt code, docs/API names such as `first`/`closest`, an order-sensitive public test, or a named default-domain convention. If the only source for the order is the candidate implementation, classify it `implementation-derived` and unresolved; it cannot justify `V2 == V1`.
 
+The **form** of a desired output is a spec signal too: a value shown bare (no opt-in transform such as `.expand()`) sets a placement obligation on the default/construction path (`eval`/constructor), not an opt-in method. Landing it on an opt-in path while the default path still returns the old value is a Finding, not a confirmation.
+
 Slice frame conditions narrowly: "marks transfer through inheritance" supports transfer/completeness; it does not by itself pin list order or same-name winner precedence. A stronger preserved sub-property needs its own order-sensitive source or named default-domain convention.
 
 Audit public compatibility for changed APIs and virtual dispatch. If the code changes a method signature, return shape, or producer/consumer protocol, or calls a virtual method with new arguments (e.g. `self.method(new_keyword=...)`), search public callers and subclass overrides and write `PUBLIC_COMPATIBILITY_AUDIT.md` — each changed symbol, public callsite/override, status, required code/test-helper update. An unhandled public override/callsite is a Finding even if the unit claim proves.
