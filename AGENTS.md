@@ -77,6 +77,7 @@ This lets FVK build on everything the coding pass learned while keeping the base
 4. If a clean spec or proof obligation cannot be written without forcing legacy behavior, record a Finding; revise the code only when the public intent justifies it.
 5. Do not edit tests unless the user asks. The default repair target is production code.
 6. Audit against the **full intent** — the whole problem statement plus the docstring / API contract / public names — not just the issue sentence. The driving question is "what is still wrong versus the full intent?", not "is V1 sound on the reported issue?" (Balance: every claimed wrongness must still trace to public-intent evidence.)
+7. When the intent obliges a **family** of values/cases, or a value with a specific **output form**, discharge it on the path that form requires and commit every member you can derive. A value shown bare must auto-evaluate on the construction path (not only under `.expand()` / `.simplify()`); a specific-point constant belongs there even if the issue only surfaced it via a workaround transform; and a complex / branch-sensitive member derived from a documented convention is as committable as an easy real one. Applying only the familiar members, or filing them on an opt-in path, leaves the family **un-discharged** — a Finding, not a confirmation.
 
 ## TEMPLATE
 
