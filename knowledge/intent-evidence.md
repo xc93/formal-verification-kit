@@ -52,6 +52,7 @@ Treat words in informal specs as semantically loaded:
 - **Boundary**: `empty`, `missing`, `zero`, `negative`, `duplicate`, `invalid` → preconditions, error behavior, or Findings.
 - **Performance**: `linear`, `constant`, `streaming`, `without copying` → complexity/space obligations or termination/performance Findings.
 - **Output form / evaluation point**: a value the issue shows **bare** — `f(x) == <closed form>` with no `.expand()` / `.simplify()` / `.doit()` or other opt-in call — is an obligation on the **default / construction path** (an `eval` / `__new__` / constructor classmethod, the operator's own result), not only under an opt-in transform. A value shown *only* under a transform binds only under that transform. Do not relocate a bare-form obligation onto an opt-in path to keep current behavior.
+- **Family / table completeness**: when intent describes a *set* of like cases (special values of a function, a rule family, overloads/operators) and shows only one example, the obligation is the **whole known set** — enumerate members from the unit's definition and established domain references, and across any duplicated/generated mirror; a nameable unhandled member (or un-mirrored copy) is a Finding. Add only members justified by intent or an established domain definition — do not invent values.
 
 The implementation tells you how the code works; the prompt tells you what it is for. Do not downgrade prompt examples to smoke tests when they express a general property.
 
