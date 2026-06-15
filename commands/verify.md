@@ -130,6 +130,10 @@ The MVP **constructs** the proof but **does NOT run `kprove`**. Therefore:
 
 Worked conditioning: [`../examples/02-sum-up/PROOF.md`](../examples/02-sum-up/PROOF.md) §6 ("Conditioned on machine-checking") and its "Reproduce the machine check" section.
 
+## Construct ≠ withhold
+
+"Constructed, not machine-checked" constrains what you may **claim** (never assert machine-checked confidence) and whether you may **delete tests** (no) — it is **not** license to **withhold a fix you have soundly derived**. If formal or intent reasoning determines the correct value, branch, edit, or member, **apply it to the code** and record the derivation; producing correct results *without running them* is exactly what the kit is for. Demote a derived change to a deferred/open Finding only when the derivation itself is genuinely incomplete or out of reach — **never merely because you cannot execute to double-check it.** (Keep labeling the proof "constructed, not machine-checked," and keep test removal conditioned on the machine check — those honesty rules stand.)
+
 ---
 
 ## Limits & escalation
